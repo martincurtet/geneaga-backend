@@ -1,0 +1,30 @@
+{
+  "name": "geneaga-backend",
+  "version": "0.0.1",
+  "description": "NodeJS server for Geneaga",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martincurtet/geneaga-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martincurtet/geneaga-backend/issues"
+  },
+  "homepage": "https://github.com/martincurtet/geneaga-backend#readme",
+  "dependencies": {
+    "console-stamp": "^3.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}
