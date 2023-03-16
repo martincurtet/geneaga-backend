@@ -22,6 +22,16 @@ NodeJS server for Geneaga
     }
   }
   ```
-
+- Create `configGmail.json` in the `configs` folder, following this structure and fill the values appropriately:
+  ```
+  {
+    "dev": {
+      "service": "",
+      "user": "",
+      "password": "",
+      "sender": ""
+    }
+  }
+  ```
 - You will need a postgres instance runnning and a database called `geneaga` on your local machine
 - Run `npm run dev`
