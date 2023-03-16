@@ -23,5 +23,9 @@ module.exports = (sequelize, DataType) => {
       updatedAt: 'modified'
     }
   )
+  User.associate = (models) => {
+    User.hasOne(models.user_password, { foreignKey: 'user_id' })
+    User.hasOne(models.user_preference, { foreignKey: 'user_id' })
+  }
   return User
 }
