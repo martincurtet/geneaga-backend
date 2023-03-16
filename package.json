@@ -1,6 +1,6 @@
 {
   "name": "geneaga-backend",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "NodeJS server for Geneaga",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "nodemailer": "^6.9.1",
     "pg": "^8.10.0",
     "sequelize": "^6.29.3"
   },
