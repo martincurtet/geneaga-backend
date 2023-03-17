@@ -175,7 +175,7 @@ exports.authController = {
       }
 
       const savedPw = await db.user_password.findOne({ where: { user_id: user.id }})
-      const matchPw = await bcrypt.compare(password, savedPw)
+      const matchPw = await bcrypt.compare(password, savedPw.password)
       if (!matchPw) {
         console.error(`/auth/login: Wrong password`)
         return res.json({
