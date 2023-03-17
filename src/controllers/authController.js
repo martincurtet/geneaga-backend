@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const db = require('../models')
+const { sendMail } = require('../utils/emailService')
 require('dotenv').config()
 
 exports.authController = {
@@ -43,15 +44,34 @@ exports.authController = {
           user_id: user.id,
           token: token
         })
-        return user
+        return { user, token }
       })
 
-      console.info(`/auth/register: User ${email} registered`)
+      sendMail({
+        to: result.user.email,
+        subject: `Verify your account`,
+        body: `Hi ${result.user.username},
+
+        Thank you for creating your Geneaga account! To complete your setup, please click on this link below:
+      
+        localhost:8080/auth/activate-account?token=${result.token}
+      
+        Once you've clicked this link, your account will be activated and you will be able to log in on 
+      
+        If you didn't register on our website, please disregard this email.
+      
+        Thanks,
+      
+        \n Geneaga
+        `
+      })
+
+      console.info(`/auth/register: User ${result.user.email} registered`)
       return res.json({
         status: 201,
         message: `User registered`,
         data: {
-          user: { id: result.id, email: result.email, username: result.username }
+          user: { id: result.user.id, email: result.user.email, username: result.user.username }
         }
       })
     } catch(err) {
@@ -66,7 +86,7 @@ exports.authController = {
 
   async activateAccount(req, res) {
     try {
-      const { token } = req.body
+      const token = req.query.token
 
       if (!token || token.trim() === '') {
         console.error(`/auth/activate-account: Missing parameter`)
