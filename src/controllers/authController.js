@@ -56,7 +56,7 @@ exports.authController = {
       
         localhost:8080/auth/activate-account?token=${result.token}
       
-        Once you've clicked this link, your account will be activated and you will be able to log in on 
+        Once you've clicked this link, your account will be activated and you will be able to log in.
       
         If you didn't register on our website, please disregard this email.
       
@@ -150,6 +150,54 @@ exports.authController = {
           message: `Server error`
         })
       }
+    }
+  },
+
+  async login(req, res) {
+    try {
+      const { email, password } = req.body
+
+      const user = await db.user.findOne({ where: { email: email }})
+      if (user === null) {
+        console.error(`/auth/login: User not found`)
+        return res.json({
+          status: 404,
+          message: `User not found`
+        })
+      }
+
+      if (!user.active) {
+        console.error(`/auth/login: User not active`)
+        return res.json({
+          status: 404,
+          message: `User not active`
+        })
+      }
+
+      const savedPw = await db.user_password.findOne({ where: { user_id: user.id }})
+      const matchPw = await bcrypt.compare(password, savedPw)
+      if (!matchPw) {
+        console.error(`/auth/login: Wrong password`)
+        return res.json({
+          status: 401,
+          message: `Wrong email or password`
+        })
+      }
+
+      // establish session
+      // give back session id
+
+      return res.json({
+        status: 201,
+        message: `User logged in`
+      })
+    } catch(err) {
+      console.error(`/auth/login`)
+      console.error(err.message)
+      return res.json({
+        status: 500,
+        message: `Server error`
+      })
     }
   }
 }
