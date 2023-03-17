@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const db = require('../models')
+require('dotenv').config()
 
 exports.authController = {
   async register(req, res) {
@@ -32,6 +34,15 @@ exports.authController = {
           language: languageCode,
           preferences: JSON.stringify(emailPreferences)
         }, { transaction: t })
+        const token = jwt.sign(
+          { user_id: user.id },
+          process.env.JWT_ACTIVATION,
+          { expiresIn: process.env.JWT_ACTIVATION_EXPIRE }
+        )
+        await db.user_activation_token.create({
+          user_id: user.id,
+          token: token
+        })
         return user
       })
 
