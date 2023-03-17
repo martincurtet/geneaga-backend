@@ -19,6 +19,8 @@ try {
   console.error(err.message)
 }
 
+app.use('/auth', require('./routers/authRouter'))
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

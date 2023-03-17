@@ -1,6 +1,6 @@
 {
   "name": "geneaga-backend",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "NodeJS server for Geneaga",
   "main": "index.js",
   "scripts": {
@@ -19,10 +19,13 @@
   },
   "homepage": "https://github.com/martincurtet/geneaga-backend#readme",
   "dependencies": {
+    "ajv": "^8.12.0",
+    "bcrypt": "^5.1.0",
     "console-stamp": "^3.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "nodemailer": "^6.9.1",
     "pg": "^8.10.0",
     "sequelize": "^6.29.3"
