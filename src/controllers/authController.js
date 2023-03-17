@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const db = require('../models')
 const { sendMail } = require('../utils/emailService')
@@ -184,12 +185,17 @@ exports.authController = {
         })
       }
 
-      // establish session
-      // give back session id
-
+      const session = await db.user_session.create({
+        user_id: user.id,
+        session_id: crypto.randomBytes(20).toString('hex'),
+        expired: false
+      })
       return res.json({
         status: 201,
-        message: `User logged in`
+        message: `User logged in`,
+        data: {
+          sessionId: session.session_id
+        }
       })
     } catch(err) {
       console.error(`/auth/login`)
