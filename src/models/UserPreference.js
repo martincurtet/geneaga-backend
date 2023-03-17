@@ -5,6 +5,9 @@ module.exports = (sequelize, DataType) => {
       user_id: {
         type: DataType.INTEGER
       },
+      language: {
+        type: DataType.STRING
+      },
       preferences: {
         type: DataType.STRING
       }
