@@ -8,7 +8,7 @@ exports.authController = {
 
       const existingUser = await db.user.findOne({ where: { email: email }})
       if (existingUser) {
-        console.error(`User already exists`)
+        console.error(`/auth/register: User already exists`)
         return res.json({
           status: 409,
           message: `User already exists`
@@ -29,12 +29,13 @@ exports.authController = {
         }, { transaction: t })
         await db.user_preference.create({
           user_id: user.id,
+          language: languageCode,
           preferences: JSON.stringify(emailPreferences)
         }, { transaction: t })
         return user
       })
 
-      console.log(`User ${email} registered`)
+      console.info(`/auth/register: User ${email} registered`)
       return res.json({
         status: 200,
         message: `User registered`,
@@ -42,10 +43,9 @@ exports.authController = {
           user: { id: result.id, email: result.email, username: result.username }
         }
       })
-      
     } catch(err) {
-      console.log(`Server error on /auth/register route`)
-      console.log(err)
+      console.error(`/auth/register`)
+      console.error(err)
       return res.json({
         status: 500,
         message: `Server error`
