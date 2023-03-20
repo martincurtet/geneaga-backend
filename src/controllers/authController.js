@@ -185,6 +185,8 @@ exports.authController = {
         })
       }
 
+      // check if session already active
+
       const session = await db.user_session.create({
         user_id: user.id,
         session_id: crypto.randomBytes(20).toString('hex'),
@@ -199,6 +201,27 @@ exports.authController = {
       })
     } catch(err) {
       console.error(`/auth/login`)
+      console.error(err.message)
+      return res.json({
+        status: 500,
+        message: `Server error`
+      })
+    }
+  },
+
+  async logout(req, res) {
+    try {
+      const { user_id } = req.body
+      db.user_session.update({ expired: true }, {
+        where: { user_id: user_id }
+      })
+      console.log(`/auth/logout: successful`)
+      return res.json({
+        status: 200,
+        message: `Logout successful`
+      })
+    } catch(err) {
+      console.error(`/auth/logout`)
       console.error(err.message)
       return res.json({
         status: 500,
