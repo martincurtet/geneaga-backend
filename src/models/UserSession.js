@@ -8,6 +8,12 @@ module.exports = (sequelize, DataType) => {
       session_id: {
         type: DataType.STRING
       },
+      ip: {
+        type: DataType.STRING
+      },
+      browser: {
+        type: DataType.STRING
+      },
       expired: {
         type: DataType.DATE
       },

@@ -8,6 +8,9 @@ module.exports = (sequelize, DataType) => {
       ip: {
         type: DataType.STRING
       },
+      browser: {
+        type: DataType.STRING
+      },
       result: {
         type: DataType.BOOLEAN
       },
