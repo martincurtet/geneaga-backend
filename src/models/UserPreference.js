@@ -8,8 +8,11 @@ module.exports = (sequelize, DataType) => {
       language: {
         type: DataType.STRING
       },
-      preferences: {
-        type: DataType.STRING
+      email_system: {
+        type: DataType.BOOLEAN
+      },
+      email_news: {
+        type: DataType.BOOLEAN
       }
     },
     {

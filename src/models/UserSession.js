@@ -9,7 +9,16 @@ module.exports = (sequelize, DataType) => {
         type: DataType.STRING
       },
       expired: {
-        type: DataType.BOOLEAN
+        type: DataType.DATE
+      },
+      expires: {
+        type: DataType.DATE
+      },
+      max_expires: {
+        type: DataType.DATE
+      },
+      expired_method: {
+        type: DataType.STRING
       }
     },
     {
