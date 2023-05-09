@@ -197,7 +197,8 @@ exports.authController = {
         session_id: crypto.randomBytes(20).toString('hex'),
         expires: new Date(currentTime.getTime() + parseInt(process.env.SESSION_TIMEOUT)),
         max_expires: new Date(currentTime.getTime() + parseInt(process.env.SESSION_MAX_AGE)),
-        ip: req.ip
+        ip: req.ip,
+        browser: req.headers['user-agent']
       })
       await loginAttempt.update({ result: true, session_id: session.session_id })
 

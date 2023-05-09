@@ -8,7 +8,8 @@ module.exports = async (req, res, next) => {
     // save login attempt
     const loginAttempt = await db.system_login_attempt.create({
       email: email ? email.trim() : null,
-      ip: req.ip
+      ip: req.ip,
+      browser: req.headers['user-agent']
     })
 
     if(!email || email.trim() === '' || !password) {
