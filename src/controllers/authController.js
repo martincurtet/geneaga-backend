@@ -157,10 +157,12 @@ exports.authController = {
   async login(req, res) {
     try {
       const { email, password } = req.body
+      const loginAttempt = res.locals.loginAttempt
 
       const user = await db.user.findOne({ where: { email: email }})
       if (user === null) {
         console.error(`/auth/login: User not found`)
+        await loginAttempt.update({ result: false, fail_method: 'user_not_found' })
         return res.json({
           status: 404,
           message: `User not found`
@@ -169,6 +171,7 @@ exports.authController = {
 
       if (!user.active) {
         console.error(`/auth/login: User not active`)
+        await loginAttempt.update({ result: false, fail_method: 'user_not_active' })
         return res.json({
           status: 404,
           message: `User not active`
@@ -179,6 +182,7 @@ exports.authController = {
       const matchPw = await bcrypt.compare(password, savedPw.password)
       if (!matchPw) {
         console.error(`/auth/login: Wrong password`)
+        await loginAttempt.update({ result: false, fail_method: 'wrong_password' })
         return res.json({
           status: 401,
           message: `Wrong email or password`
@@ -187,11 +191,19 @@ exports.authController = {
 
       // check if session already active
 
+      const currentTime = new Date()
       const session = await db.user_session.create({
         user_id: user.id,
         session_id: crypto.randomBytes(20).toString('hex'),
-        expired: false
+        expires: new Date(currentTime.getTime() + parseInt(process.env.SESSION_TIMEOUT)),
+        max_expires: new Date(currentTime.getTime() + parseInt(process.env.SESSION_MAX_AGE)),
+        ip: req.ip
       })
+      await loginAttempt.update({ result: true, session_id: session.session_id })
+
+      // update last login
+      await user.update({ last_login: Date.now() })
+
       return res.json({
         status: 201,
         message: `User logged in`,
@@ -212,7 +224,10 @@ exports.authController = {
   async logout(req, res) {
     try {
       const { user_id } = req.body
-      db.user_session.update({ expired: true }, {
+      db.user_session.update({
+        expired: Date.now(),
+        expired_method: 'manual'
+      }, {
         where: { user_id: user_id }
       })
       console.log(`/auth/logout: successful`)
